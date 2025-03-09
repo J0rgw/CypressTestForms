@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Registro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#121212',
+                            800: '#1e1e1e',
+                            700: '#2d2d2d',
+                            600: '#3d3d3d',
+                        },
+                        accent: {
+                            500: '#ff7700',
+                            600: '#e66900',
+                            700: '#cc5c00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-900 text-gray-200 min-h-screen">
+    <div class="container mx-auto px-4 py-10">
+        <div class="max-w-md mx-auto bg-dark-800 rounded-lg shadow-lg p-6">
+            <div class="text-center mb-6">
+                <svg class="mx-auto h-20 w-20 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h1 class="text-2xl font-bold text-accent-500 mt-4">Bienvenido</h1>
+                <p class="text-xl mt-2">Bienvenido/a, <span id="userName"></span></p>
+            </div>
+            
+            <div class="user-info bg-dark-700 rounded-lg p-4 mb-6">
+                <h2 class="text-lg font-semibold mb-2">Información del Usuario</h2>
+                <ul class="space-y-2">
+                    <li><strong>Nombre:</strong> <span id="userNameInfo"></span></li>
+                    <li><strong>Correo electrónico:</strong> <span id="userEmailInfo"></span></li>
+                    <li><strong>Fecha de nacimiento:</strong> <span id="userBirthdateInfo">No proporcionada</span></li>
+                </ul>
+            </div>
+            
+            <div class="flex space-x-4">
+                <button id="goBackButton" class="flex-1 bg-dark-600 hover:bg-dark-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-dark-500">
+                    Volver al inicio
+                </button>
+                <button id="continueButton" class="flex-1 bg-accent-500 hover:bg-accent-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-700">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Recuperar datos del localStorage
+            const nombre = localStorage.getItem('userNombre') || '';
+            const email = localStorage.getItem('userEmail') || '';
+            const fechaNacimiento = localStorage.getItem('userFechaNacimiento') || '';
+            
+            // Mostrar los datos en la página
+            document.getElementById('userName').textContent = nombre;
+            document.getElementById('userNameInfo').textContent = nombre;
+            document.getElementById('userEmailInfo').textContent = email;
+            
+            if (fechaNacimiento) {
+                const fecha = new Date(fechaNacimiento);
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                document.getElementById('userBirthdateInfo').textContent = fecha.toLocaleDateString('es-ES', options);
+            }
+            
+            // Manejar botones
+            document.getElementById('goBackButton').addEventListener('click', function() {
+                window.location.href = '/';
+            });
+            
+            document.getElementById('continueButton').addEventListener('click', function() {
+                alert('Redirigiendo al área de usuario...');
+                // Aquí iría la redirección a la página del área de usuario
+            });
+        });
+    </script>
+</body>
+</html>
