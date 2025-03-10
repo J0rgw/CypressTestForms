@@ -85,8 +85,14 @@ Las pruebas con Cypress verifican:
 
 ## Screenshots
 
-![Formulario de Registro](screenshot1.png)
-![Confirmación de Registro](screenshot2.png)
+![Formulario de Registro](screenshots/screenshot1.png)
+![Confirmación de Registro](screenshots/screenshot2.png)
+
+**Test Cypress**
+![test Cypress 1](screenshots/cypress.png)
+![test Cypress 2](screenshots/cypress2.png)
+![test Cypress 3](screenshots/cypress3.png)
+
 
 ## Personalización
 
