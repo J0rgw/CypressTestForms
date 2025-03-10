@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#121212',
+                            800: '#1e1e1e',
+                            700: '#2d2d2d',
+                            600: '#3d3d3d',
+                        },
+                        accent: {
+                            500: '#ff7700',
+                            600: '#e66900',
+                            700: '#cc5c00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(30, 30, 30, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 119, 0, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        
+        .glow {
+            box-shadow: 0 0 15px rgba(255, 119, 0, 0.7);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 119, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 119, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 119, 0, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-200 min-h-screen">
+    <!-- Página de inicio (Login) -->
+    <div id="loginPage" class="container mx-auto px-4 py-10 min-h-screen flex items-center justify-center">
+        <div class="max-w-md w-full glass rounded-xl shadow-xl p-8 text-center">
+            <div class="mb-8 flex justify-center">
+                <div class="h-24 w-24 rounded-full bg-dark-800 border-2 border-accent-500 glow flex items-center justify-center">
+                    <svg class="h-12 w-12 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="text-2xl font-bold text-accent-500 mb-2">Bienvenido al Sistema</h1>
+            <p class="text-gray-400 mb-8">Inicia sesión o crea una nueva cuenta</p>
+            
+            <div class="space-y-4">
+                <button id="loginButton" class="w-full bg-dark-700 hover:bg-dark-600 border border-accent-500 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-500">
+                    Iniciar Sesión
+                </button>
+                
+                <button id="registerButton" class="w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-3 px-4 rounded-lg pulse transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-700">
+                    Crear Cuenta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <div id="registrationPage" class="container mx-auto px-4 py-10 hidden">
+        <div class="max-w-md mx-auto bg-dark-800 rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-center mb-6 text-accent-500">Crear Cuenta</h1>
+            
+            <form id="registrationForm" class="space-y-4">
+                <!-- Nombre completo -->
+                <div>
+                    <label for="fullName" class="block text-sm font-medium mb-1">Nombre completo <span class="text-accent-500">*</span></label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        class="w-full bg-dark-700 border border-dark-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                        required
+                    >
+                    <p id="fullNameError" class="text-red-500 text-xs mt-1 hidden">El nombre completo es obligatorio</p>
+                </div>
+                
+                <!-- Correo electrónico -->
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-1">Correo electrónico <span class="text-accent-500">*</span></label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="w-full bg-dark-700 border border-dark-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                        required
+                    >
+                    <p id="emailError" class="text-red-500 text-xs mt-1 hidden">Introduce un correo electrónico válido</p>
+                </div>
+                
+                <!-- Contraseña -->
+                <div>
+                    <label for="password" class="block text-sm font-medium mb-1">Contraseña <span class="text-accent-500">*</span></label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="w-full bg-dark-700 border border-dark-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                        required
+                    >
+                    <p id="passwordError" class="text-red-500 text-xs mt-1 hidden">La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número</p>
+                </div>
+                
+                <!-- Confirmación de contraseña -->
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium mb-1">Confirmar contraseña <span class="text-accent-500">*</span></label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        name="confirmPassword" 
+                        class="w-full bg-dark-700 border border-dark-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                        required
+                    >
+                    <p id="confirmPasswordError" class="text-red-500 text-xs mt-1 hidden">Las contraseñas no coinciden</p>
+                </div>
+                
+                <!-- Fecha de nacimiento -->
+                <div>
+                    <label for="birthdate" class="block text-sm font-medium mb-1">Fecha de nacimiento</label>
+                    <input 
+                        type="date" 
+                        id="birthdate" 
+                        name="birthdate" 
+                        class="w-full bg-dark-700 border border-dark-600 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-accent-500"
+                    >
+                </div>
+                
+                <!-- Términos y condiciones -->
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        <input 
+                            type="checkbox" 
+                            id="terms" 
+                            name="terms" 
+                            class="w-4 h-4 bg-dark-700 border border-dark-600 rounded focus:ring-accent-500 focus:ring-2"
+                            required
+                        >
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="terms" class="font-medium">Acepto los <a href="#" class="text-accent-500 hover:underline">términos y condiciones</a> <span class="text-accent-500">*</span></label>
+                        <p id="termsError" class="text-red-500 text-xs mt-1 hidden">Debes aceptar los términos y condiciones</p>
+                    </div>
+                </div>
+                
+                <!-- Botón de envío -->
+                <div class="flex space-x-4">
+                    <button 
+                        type="button" 
+                        id="backButton" 
+                        class="w-1/3 bg-dark-600 hover:bg-dark-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-dark-500"
+                    >
+                        Volver
+                    </button>
+                    <button 
+                        type="submit" 
+                        id="submitButton" 
+                        class="w-2/3 bg-accent-500 hover:bg-accent-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled
+                    >
+                        Registrarse
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Página de confirmación -->
+    <div id="confirmationPage" class="container mx-auto px-4 py-10 hidden">
+        <div class="max-w-md mx-auto bg-dark-800 rounded-lg shadow-lg p-6">
+            <div class="text-center mb-6">
+                <svg class="mx-auto h-20 w-20 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h1 class="text-2xl font-bold text-accent-500 mt-4">¡Registro Exitoso!</h1>
+                <p class="text-xl mt-2" id="welcomeMessage">Bienvenido/a, <span id="userNameDisplay"></span></p>
+            </div>
+            
+            <div class="bg-dark-700 rounded-lg p-4 mb-6">
+                <h2 class="text-lg font-semibold mb-2">Resumen de información</h2>
+                <ul class="space-y-2">
+                    <li><strong>Nombre:</strong> <span id="summaryName"></span></li>
+                    <li><strong>Correo electrónico:</strong> <span id="summaryEmail"></span></li>
+                    <li><strong>Fecha de nacimiento:</strong> <span id="summaryBirthdate">No proporcionada</span></li>
+                </ul>
+            </div>
+            
+            <div class="flex space-x-4">
+                <button id="backToHomeButton" class="flex-1 bg-dark-600 hover:bg-dark-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-dark-500">
+                    Volver al inicio
+                </button>
+                <button id="continueButton" class="flex-1 bg-accent-500 hover:bg-accent-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-700">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Página de información de usuario -->
+    <div id="userInfoPage" class="container mx-auto px-4 py-10 hidden">
+        <div class="max-w-3xl mx-auto bg-dark-800 rounded-lg shadow-lg overflow-hidden">
+            <!-- Encabezado con banner -->
+            <div class="h-32 bg-gradient-to-r from-accent-700 via-accent-500 to-accent-600 relative">
+                <div class="absolute -bottom-16 left-6">
+                    <div class="h-32 w-32 rounded-full bg-dark-700 border-4 border-dark-800 glow flex items-center justify-center">
+                        <svg class="h-16 w-16 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido -->
+            <div class="pt-20 p-6">
+                <h1 class="text-2xl font-bold text-accent-500" id="profileName">Nombre del Usuario</h1>
+                <p class="text-gray-400 mb-6" id="profileEmail">usuario@ejemplo.com</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tarjeta de información personal -->
+                    <div class="bg-dark-700 rounded-lg p-4">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                            Información Personal
+                        </h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Nombre completo:</span>
+                                <span id="infoName">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Correo electrónico:</span>
+                                <span id="infoEmail">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Fecha de nacimiento:</span>
+                                <span id="infoBirthdate">-</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Fecha de registro:</span>
+                                <span id="infoRegistrationDate">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tarjeta de actividad reciente -->
+                    <div class="bg-dark-700 rounded-lg p-4">
+                        <h2 class="text-lg font-semibold mb-4 flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Actividad Reciente
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="h-2 w-2 rounded-full bg-green-500 mt-2 mr-2"></div>
+                                <div>
+                                    <p class="text-sm">Cuenta creada</p>
+                                    <p class="text-xs text-gray-400" id="activityRegistration">-</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="h-2 w-2 rounded-full bg-blue-500 mt-2 mr-2"></div>
+                                <div>
+                                    <p class="text-sm">Perfil visitado</p>
+                                    <p class="text-xs text-gray-400" id="activityProfileVisit">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-dark-700 rounded-lg p-4">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Preferencias de cuenta
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span>Recibir notificaciones por correo</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-dark-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-500"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Mostrar fecha de nacimiento en perfil</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer">
+                                <div class="w-11 h-6 bg-dark-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button id="logoutButton" class="px-6 py-2 bg-dark-700 hover:bg-dark-600 text-white font-medium rounded-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-dark-500">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Almacenamiento de datos de usuario
+            let userData = {};
+            
+            // Referencias a las páginas
+            const loginPage = document.getElementById('loginPage');
+            const registrationPage = document.getElementById('registrationPage');
+            const confirmationPage = document.getElementById('confirmationPage');
+            const userInfoPage = document.getElementById('userInfoPage');
+            
+            // Botones de navegación en la página de inicio
+            document.getElementById('loginButton').addEventListener('click', function() {
+                // En una aplicación real, esto mostraría el formulario de login
+                // Por ahora, solo mostramos un mensaje
+                alert('Esta funcionalidad de login estaría implementada en una aplicación real.');
+            });
+            
+            document.getElementById('registerButton').addEventListener('click', function() {
+                loginPage.classList.add('hidden');
+                registrationPage.classList.remove('hidden');
+            });
+            
+            // Botón para volver al inicio desde el formulario de registro
+            document.getElementById('backButton').addEventListener('click', function() {
+                registrationPage.classList.add('hidden');
+                loginPage.classList.remove('hidden');
+            });
+            
+            // Funciones de validación del formulario
+            const form = document.getElementById('registrationForm');
+            const submitButton = document.getElementById('submitButton');
+            
+            function validateFullName() {
+                const fullName = document.getElementById('fullName');
+                const error = document.getElementById('fullNameError');
+                
+                if (!fullName.value.trim()) {
+                    error.classList.remove('hidden');
+                    return false;
+                } else {
+                    error.classList.add('hidden');
+                    return true;
+                }
+            }
+            
+            function validateEmail() {
+                const email = document.getElementById('email');
+                const error = document.getElementById('emailError');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (!emailRegex.test(email.value)) {
+                    error.classList.remove('hidden');
+                    return false;
+                } else {
+                    error.classList.add('hidden');
+                    return true;
+                }
+            }
+            
+            function validatePassword() {
+                const password = document.getElementById('password');
+                const error = document.getElementById('passwordError');
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+                
+                if (!passwordRegex.test(password.value)) {
+                    error.classList.remove('hidden');
+                    return false;
+                } else {
+                    error.classList.add('hidden');
+                    return true;
+                }
+            }
+            
+            function validateConfirmPassword() {
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirmPassword');
+                const error = document.getElementById('confirmPasswordError');
+                
+                if (password.value !== confirmPassword.value) {
+                    error.classList.remove('hidden');
+                    return false;
+                } else {
+                    error.classList.add('hidden');
+                    return true;
+                }
+            }
+            
+            function validateTerms() {
+                const terms = document.getElementById('terms');
+                const error = document.getElementById('termsError');
+                
+                if (!terms.checked) {
+                    error.classList.remove('hidden');
+                    return false;
+                } else {
+                    error.classList.add('hidden');
+                    return true;
+                }
+            }
+            
+            function validateForm() {
+                const isFullNameValid = validateFullName();
+                const isEmailValid = validateEmail();
+                const isPasswordValid = validatePassword();
+                const isConfirmPasswordValid = validateConfirmPassword();
+                const areTermsAccepted = validateTerms();
+                
+                const isFormValid = isFullNameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid && areTermsAccepted;
+                
+                submitButton.disabled = !isFormValid;
+                
+                return isFormValid;
+            }
+            
+            // Añadir event listeners para validación en tiempo real
+            document.getElementById('fullName').addEventListener('input', validateFullName);
+            document.getElementById('email').addEventListener('input', validateEmail);
+            document.getElementById('password').addEventListener('input', function() {
+                validatePassword();
+                if (document.getElementById('confirmPassword').value) {
+                    validateConfirmPassword();
+                }
+            });
+            document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+            document.getElementById('terms').addEventListener('change', validateTerms);
+            
+            // Validar todo el formulario en cada cambio
+            form.addEventListener('input', validateForm);
+            
+            // Manejar envío del formulario
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    // Guardar los datos del usuario
+                    userData = {
+                        fullName: document.getElementById('fullName').value,
+                        email: document.getElementById('email').value,
+                        birthdate: document.getElementById('birthdate').value,
+                        registrationDate: new Date().toLocaleString('es-ES')
+                    };
+                    
+                    // Mostrar la página de confirmación
+                    registrationPage.classList.add('hidden');
+                    confirmationPage.classList.remove('hidden');
+                    
+                    // Llenar el resumen con los datos
+                    document.getElementById('userNameDisplay').textContent = userData.fullName;
+                    document.getElementById('summaryName').textContent = userData.fullName;
+                    document.getElementById('summaryEmail').textContent = userData.email;
+                    
+                    if (userData.birthdate) {
+                        const formattedDate = new Date(userData.birthdate).toLocaleDateString('es-ES');
+                        document.getElementById('summaryBirthdate').textContent = formattedDate;
+                    }
+                }
+            });
+            
+            // Botones de la página de confirmación
+            document.getElementById('backToHomeButton').addEventListener('click', function() {
+                // Volver a la página de inicio
+                confirmationPage.classList.add('hidden');
+                loginPage.classList.remove('hidden');
+            });
+            
+            document.getElementById('continueButton').addEventListener('click', function() {
+                // Ir a la página de información del usuario
+                confirmationPage.classList.add('hidden');
+                userInfoPage.classList.remove('hidden');
+                
+                // Llenar la página de información con los datos
+                document.getElementById('profileName').textContent = userData.fullName;
+                document.getElementById('profileEmail').textContent = userData.email;
+                document.getElementById('infoName').textContent = userData.fullName;
+                document.getElementById('infoEmail').textContent = userData.email;
+                
+                const now = new Date();
+                document.getElementById('infoRegistrationDate').textContent = userData.registrationDate;
+                document.getElementById('activityRegistration').textContent = userData.registrationDate;
+                document.getElementById('activityProfileVisit').textContent = now.toLocaleString('es-ES');
+                
+                if (userData.birthdate) {
+                    const formattedDate = new Date(userData.birthdate).toLocaleDateString('es-ES');
+                    document.getElementById('infoBirthdate').textContent = formattedDate;
+                } else {
+                    document.getElementById('infoBirthdate').textContent = 'No proporcionada';
+                }
+            });
+            
+            // Botón de logout en la página de información del usuario
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                // Volver a la página de inicio
+                userInfoPage.classList.add('hidden');
+                loginPage.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
